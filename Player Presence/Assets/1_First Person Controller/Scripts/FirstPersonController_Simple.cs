@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//allows the player to move in the virtual space as if looking through the eyes of the character
+//uses simple transform manipulatation to accomplish this. Easiest method but not always reliable in a 3d space
 public class FirstPersonController_Simple : MonoBehaviour {
 
     //related to character motion
@@ -12,14 +14,14 @@ public class FirstPersonController_Simple : MonoBehaviour {
     public float camSmoothing = 2.0f;           //controls the smoothness of the camera movement
     private Vector2 camSmoothRotation;          //rotation 2d vector used to smoothly rotate the camera
     private Vector2 camMouseLook;               //2d vector to control where the camera should look at relative to the mouse movement
-    private Camera cam;
+    private Camera cam;                         //reference to the main camera in the scene
 
-    // Use this for initialization
+    //Use this for initialization
     void Start () {
         cam = Camera.main;
 	}
 	
-	// Update is called once per frame
+	//Update is called once per frame
 	void Update () {
         MovePlayer();
         MouseLook();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //allows the player to move in the virtual space as if looking through the eyes of the character
+//uses physics to accomlish this but requires some setup and understanding of physics materials and rigidbody mechanics
 public class FirstPersonController_Physics : MonoBehaviour {
 
     //related to character motion
@@ -24,7 +25,7 @@ public class FirstPersonController_Physics : MonoBehaviour {
     public float camSmoothing = 2.0f;           //controls the smoothness of the camera movement
     private Vector2 camSmoothRotation;          //rotation 2d vector used to smoothly rotate the camera
     private Vector2 camMouseLook;               //2d vector to control where the camera should look at relative to the mouse movement
-    private Camera cam;
+    private Camera cam;                         //reference to the main camera in the scene
 
     //These friction materials are used to reduce skating and control how quickly the player stops when no more input is read
     public PhysicMaterial minFriction;          //we want minimum friction when the character is in motion (0.0)   
