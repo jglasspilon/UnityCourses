@@ -60,6 +60,7 @@ public class ThirdPersonController_Camera : MonoBehaviour {
         Vector3 finalPosition = new Vector3(newPositionX, newPositionY, newPositionZ);
         finalPosition = RotateVectorAroundPivot(finalPosition, character.transform.position, Quaternion.Euler(new Vector3(0, camRotationalOffset, 0)));
 
+        //set this as our new position for the camera
         transform.position = finalPosition;
 
         //forces the camera to the location offset from the character
