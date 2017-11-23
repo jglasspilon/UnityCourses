@@ -82,7 +82,7 @@ public class FirstPersonController_Physics : MonoBehaviour {
         //if either of the axes are not equal to zero than we want to move the player
         if(horizontalInput != 0 || verticalInput != 0)
         {
-            MovePlayerUsingForces(horizontalInput, verticalInput);
+            MovePlayer(horizontalInput, verticalInput);
         }
 
         //otherwise we are not moving so set the move speed to zero
@@ -103,7 +103,7 @@ public class FirstPersonController_Physics : MonoBehaviour {
     //moves the player relative to the input form the axes using the rigidbody function AddForce
     //this is the most reliable method for moving physical objects in a 3D game when we need to take gravity and collisions into account
     //however, a physics material is generally needed in order to control the slowdown
-    private void MovePlayerUsingForces(float horizontalAxis, float verticalAxis)
+    private void MovePlayer(float horizontalAxis, float verticalAxis)
     {
         //Get the movement axis vectors (x and z) and scale them byt the input and speed scale
         Vector3 xMovement = horizontalAxis * speedScale * transform.right;
@@ -130,7 +130,8 @@ public class FirstPersonController_Physics : MonoBehaviour {
         }
     }
 
-    //uses the mouse movement to rotate the camera
+    //uses the mouse movement to rotate the camera by determining the distance the mouse has moved, smoothing it
+    //out and adding this scalled distance to the camera or character's rotation
     private void MouseLook()
     {
         //create a 2d vector using the mouse movement axes
