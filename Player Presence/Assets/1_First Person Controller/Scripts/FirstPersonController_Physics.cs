@@ -20,13 +20,6 @@ public class FirstPersonController_Physics : MonoBehaviour {
     private Rigidbody playerRB;                 //player's physical entity in the virtual space (controls physics calculations)
     private Collider playerCol;                 //player's physical volume in the virtual space (controls object boundary and collisions)
 
-    //related to mouse camera controls
-    public float mouseSensitivity = 5.0f;       //sensitivity for camera movement related to mouse movement
-    public float camSmoothing = 2.0f;           //controls the smoothness of the camera movement
-    private Vector2 camSmoothRotation;          //rotation 2d vector used to smoothly rotate the camera
-    private Vector2 camMouseLook;               //2d vector to control where the camera should look at relative to the mouse movement
-    private Camera cam;                         //reference to the main camera in the scene
-
     //These friction materials are used to reduce skating and control how quickly the player stops when no more input is read
     public PhysicMaterial minFriction;          //we want minimum friction when the character is in motion (0.0)   
     public PhysicMaterial maxFriction;          //we want max friction when the player is idle (5.0)               
@@ -37,7 +30,6 @@ public class FirstPersonController_Physics : MonoBehaviour {
     {
         playerRB = GetComponent<Rigidbody>();
         playerCol = GetComponent<Collider>();
-        cam = Camera.main;
     }
 
     //FixedUpdate is called every frame regardless of frame rate (best when doing physics related functionality)
@@ -97,8 +89,6 @@ public class FirstPersonController_Physics : MonoBehaviour {
         {
             Jump();
         }
-
-        MouseLook();
     }
 
     //moves the player relative to the input form the axes using the rigidbody function AddForce
@@ -129,29 +119,5 @@ public class FirstPersonController_Physics : MonoBehaviour {
         {
             playerRB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
-    }
-
-    //uses the mouse movement to rotate the camera by determining the distance the mouse has moved, smoothing it
-    //out and adding this scalled distance to the camera or character's rotation
-    private void MouseLook()
-    {
-        //create a 2d vector using the mouse movement axes
-        Vector2 mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-
-        //scale the vector by the sensitivity and smoothing
-        mouseDelta *= mouseSensitivity * camSmoothing;
-
-        //interpolates the next value of the cam's rotation based on the movement of the mouse
-        //will gradually increase the value of camSmoothRotation towards mouseDelta at a rate of 1/camSmoothing
-        camSmoothRotation.x = Mathf.Lerp(camSmoothRotation.x, mouseDelta.x, 1f / camSmoothing);
-        camSmoothRotation.y = Mathf.Lerp(camSmoothRotation.y, mouseDelta.y, 1f / camSmoothing);
-
-        //adds the new rotation values to the camera's look vector
-        camMouseLook += camSmoothRotation;
-
-        //rotate the camera verticaly along the x axis (Vector3.rigth) by the negative y value of the mouse look 2d vector
-        //and rotate the player horizontaly along its upward axis (transform.up) by the x value of the mouse look 2d vector
-        cam.transform.localRotation = Quaternion.AngleAxis(-camMouseLook.y, Vector3.right);
-        transform.localRotation = Quaternion.AngleAxis(camMouseLook.x, transform.up);
     }
 }
