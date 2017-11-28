@@ -9,7 +9,7 @@ public class FirstPersonController_Physics : FirstPersonController {
     //related to character motion
     public float maxVelocity = 5.0f;            //allows us to control the maximum speed for the player movement
     private Vector2 moveSpeed;                  //keeps track of the character's actual movement speed
-    public float jumpForce = 10.0f;             //controls the amplitude of the jump - not always necessary
+    public float jumpForce = 10.0f;             //controls the amplitude of the jump 
     public KeyCode jumpKey;                     //allows the user to select which key we want to use for jump - not necessary but keeps things clean and modifiable
 
     //related to character state
@@ -22,7 +22,6 @@ public class FirstPersonController_Physics : FirstPersonController {
     //These friction materials are used to reduce skating and control how quickly the player stops when no more input is read
     public PhysicMaterial minFriction;          //we want minimum friction when the character is in motion (0.0)   
     public PhysicMaterial maxFriction;          //we want max friction when the player is idle (5.0)               
-    
 
     //Start is called once at the start of the scene. Used for initialization
     private void Start()
@@ -98,7 +97,7 @@ public class FirstPersonController_Physics : FirstPersonController {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        //Get the movement axis vectors (x and z) and scale them byt the input and speed scale
+        //Get the movement axis vectors (x and z) and scale them by the input and speed scale
         Vector3 xMovement = horizontalInput * speedScale * transform.right;
         Vector3 zMovement = verticalInput * speedScale * transform.forward;
 

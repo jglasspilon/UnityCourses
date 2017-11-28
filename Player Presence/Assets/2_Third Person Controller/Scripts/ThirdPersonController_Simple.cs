@@ -6,13 +6,10 @@ using UnityEngine;
 //uses simple transform manipulation to accomplish this and let's Unity's hierarchy system control the camera movement
 //the camera should be a child of the controller so when it rotates the camera follows along (no camera control script required)
 //this is the simplest method but is not always reliable in a 3d space 
-public class ThirdPersonController_Simple : MonoBehaviour {
+public class ThirdPersonController_Simple : ThirdPersonController {
 
     //related to character motion
-    public float moveSpeedScale = 5.0f;             //scales the character's movement speed
     public float turnSpeedScale = 50.0f;            //scales the character's turning speed
-
-    private Animator playerAnimator;                //reference to the character's animator (there should be only a single animator component for the entire character)
 
     //Use this for initialization
     private void Start()
@@ -28,7 +25,7 @@ public class ThirdPersonController_Simple : MonoBehaviour {
     }
 
     //moves the player forward or backwards relative to the player input
-    private void MovePlayer()
+    protected override void MovePlayer()
     {
         //store the vertical axis value so we can reuse it
         float verticalInput = Input.GetAxis("Vertical");
@@ -51,5 +48,16 @@ public class ThirdPersonController_Simple : MonoBehaviour {
 
         //rotates the player by the yRotation amount
         transform.Rotate(0, yRotation, 0);
+    }
+
+    //Handles the communication to the animator controller and will set all animator parameters accordingly
+    protected override void AnimatePlayer()
+    {
+        //////////////////////////////////////////////////////////////////////////////////////////
+        //  vvvvvvvvvvvvvvvvvvvvvvv Add all animator based code here vvvvvvvvvvvvvvvvvvvvvvvvv  //
+         
+        
+        
+        //////////////////////////////////////////////////////////////////////////////////////////
     }
 }

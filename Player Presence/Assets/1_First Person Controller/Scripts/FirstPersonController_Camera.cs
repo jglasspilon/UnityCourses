@@ -17,7 +17,7 @@ public class FirstPersonController_Camera : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void LateUpdate () {
         MouseLook();
 	}
 

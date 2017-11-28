@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Base class for all first person controllers
 public abstract class FirstPersonController : MonoBehaviour {
 
     //related to character motion

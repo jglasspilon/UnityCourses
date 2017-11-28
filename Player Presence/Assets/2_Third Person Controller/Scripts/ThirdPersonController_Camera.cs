@@ -9,18 +9,18 @@ public class ThirdPersonController_Camera : MonoBehaviour {
     //related to mouse camera controls
     public float mouseSensitivity = 5.0f;       //sensitivity for camera movement related to mouse movement
     public float camSmoothing = 2.0f;           //controls the smoothness of the camera movement
-    private Vector2 camRotation;                  //rotation value used to smoothly rotate the camera
-    private Vector2 camMouseLook;                 //rotation value to control where the camera should be rotated around the character relative to the mouse movement
-    private Vector2 camRotationalOffset;          //keeps track of the rotational offset created by the mouse look
+    private Vector2 camRotation;                //rotation value used to smoothly rotate the camera
+    private Vector2 camMouseLook;               //rotation value to control where the camera should be rotated around the character relative to the mouse movement
+    private Vector2 camRotationalOffset;        //keeps track of the rotational offset created by the mouse look
 
     //related to the camera's positioning and orientation
-    public GameObject character;                //reference to the player character
+    public ThirdPersonController character;     //reference to the player character
     public Vector3 positionalOffset;            //controls the camera's position relative to the character's current position
     public Vector3 lookOffset;                  //controls where the camera will look at relative to the character's position
     public float positionalSmoothing = 2.0f;
 	
 	// Update is called once per frame
-	void Update () {
+	void LateUpdate () {
         MouseLook();
         PositionCamera();
     }
