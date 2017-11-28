@@ -9,11 +9,11 @@ public class FirstPersonController_Camera : MonoBehaviour {
     public float camSmoothing = 2.0f;           //controls the smoothness of the camera movement
     private Vector2 camSmoothRotation;          //rotation 2d vector used to smoothly rotate the camera
     private Vector2 camMouseLook;               //2d vector to control where the camera should look at relative to the mouse movement
-    private GameObject player;                  //reference to the player object in the scene
+    private FirstPersonController player;       //reference to the player object in the scene
 
     private void Start()
     {
-        player = transform.parent.gameObject;
+        player = transform.parent.GetComponent<FirstPersonController>();
     }
 
     // Update is called once per frame
@@ -38,6 +38,9 @@ public class FirstPersonController_Camera : MonoBehaviour {
 
         //adds the new rotation values to the camera's look vector
         camMouseLook += camSmoothRotation;
+
+        //limit the max vertical rotation between -90 degrees and 90 degrees so we can't flip the camera
+        camMouseLook.y = Mathf.Clamp(camMouseLook.y, -90, 90);
 
         //rotate the camera verticaly along the x axis (Vector3.rigth) by the negative y value of the mouse look 2d vector
         //and rotate the player horizontaly along the y axis (Vector3.up) by the x value of the mouse look 2d vector

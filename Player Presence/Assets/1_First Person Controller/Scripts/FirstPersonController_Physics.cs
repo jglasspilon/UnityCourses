@@ -4,10 +4,9 @@ using UnityEngine;
 
 //allows the player to move in the virtual space as if looking through the eyes of the character
 //uses physics to accomlish this but requires some setup and understanding of physics materials and rigidbody mechanics
-public class FirstPersonController_Physics : MonoBehaviour {
+public class FirstPersonController_Physics : FirstPersonController {
 
     //related to character motion
-    public float speedScale = 5.0f;             //scales the character's movement speed
     public float maxVelocity = 5.0f;            //allows us to control the maximum speed for the player movement
     private Vector2 moveSpeed;                  //keeps track of the character's actual movement speed
     public float jumpForce = 10.0f;             //controls the amplitude of the jump - not always necessary
@@ -58,34 +57,33 @@ public class FirstPersonController_Physics : MonoBehaviour {
     }
 
     //sends a ray from its position (bottom of capsule) downwards to see if there is something directly below
-    //if the ray has a length greater than our expected threshold (0.5) then we are not grounded
+    //if the ray has a length greater than our expected threshold (0.1f) then we are not grounded
     private void CheckGround()
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.5f);
-        Debug.Log(isGrounded);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
     }
 
     //reads the player input and reacts accordingly
     private void ReadPlayerInput()
     {
-        //store both axes values into floats so we can reuse them without recreating extra variables
+        //store both axes values into floats so we can reuse them
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
         //if either of the axes are not equal to zero than we want to move the player
         if(horizontalInput != 0 || verticalInput != 0)
         {
-            MovePlayer(horizontalInput, verticalInput);
+            MovePlayer();
         }
 
-        //otherwise we are not moving so set the move speed to zero
+        //otherwise there is no movement input so set the move speed to zero
         else
         {
             moveSpeed = Vector2.zero;
         }
 
         //if the designated jump key is pressed then make the player jump
-        if (Input.GetKeyDown(jumpKey))
+        if (Input.GetKey(jumpKey))
         {
             Jump();
         }
@@ -94,11 +92,15 @@ public class FirstPersonController_Physics : MonoBehaviour {
     //moves the player relative to the input form the axes using the rigidbody function AddForce
     //this is the most reliable method for moving physical objects in a 3D game when we need to take gravity and collisions into account
     //however, a physics material is generally needed in order to control the slowdown
-    private void MovePlayer(float horizontalAxis, float verticalAxis)
+    protected override void MovePlayer()
     {
+        //store both axes values into floats so we can reuse them
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
         //Get the movement axis vectors (x and z) and scale them byt the input and speed scale
-        Vector3 xMovement = horizontalAxis * speedScale * transform.right;
-        Vector3 zMovement = verticalAxis * speedScale * transform.forward;
+        Vector3 xMovement = horizontalInput * speedScale * transform.right;
+        Vector3 zMovement = verticalInput * speedScale * transform.forward;
 
         //add both movement axis vectors so we can move in both directions at once
         Vector3 MoveForce = xMovement + zMovement;

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//allows the player to move in the virtual space as if looking over the character's shoulder
-//uses simplen transform manipulation to accomplish this and let's Unity's hierarchy system control the camera movement
-//the camera should be a child of the controller so when it rotates the camera follows along
+//allows the player to move in the virtual space as if looking towards the character as the main focus
+//uses simple transform manipulation to accomplish this and let's Unity's hierarchy system control the camera movement
+//the camera should be a child of the controller so when it rotates the camera follows along (no camera control script required)
 //this is the simplest method but is not always reliable in a 3d space 
 public class ThirdPersonController_Simple : MonoBehaviour {
 

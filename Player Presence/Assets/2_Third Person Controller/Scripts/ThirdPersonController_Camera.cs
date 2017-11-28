@@ -9,9 +9,9 @@ public class ThirdPersonController_Camera : MonoBehaviour {
     //related to mouse camera controls
     public float mouseSensitivity = 5.0f;       //sensitivity for camera movement related to mouse movement
     public float camSmoothing = 2.0f;           //controls the smoothness of the camera movement
-    private float camRotation;                  //y rotation value used to smoothly rotate the camera
-    private float camMouseLook;                 //y rotation value to control where the camera should be rotated around the character relative to the mouse movement
-    private float camRotationalOffset;          //keeps track of the rotational offset created by the mouse look
+    private Vector2 camRotation;                  //rotation value used to smoothly rotate the camera
+    private Vector2 camMouseLook;                 //rotation value to control where the camera should be rotated around the character relative to the mouse movement
+    private Vector2 camRotationalOffset;          //keeps track of the rotational offset created by the mouse look
 
     //related to the camera's positioning and orientation
     public GameObject character;                //reference to the player character
@@ -30,20 +30,25 @@ public class ThirdPersonController_Camera : MonoBehaviour {
     private void MouseLook()
     {
         //create a 2d vector using the mouse movement axes
-        float mouseDelta = Input.GetAxisRaw("Mouse X");
+        Vector2 mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
-        //scale the value by the sensitivity and smoothing
+        //scale the vector by the sensitivity and smoothing
         mouseDelta *= mouseSensitivity * camSmoothing;
 
         //interpolates the next value of the cam's rotation based on the movement of the mouse
         //will gradually increase the value of camSmoothRotation towards mouseDelta at a rate of 1/camSmoothing
-        camRotation = Mathf.Lerp(camRotation, mouseDelta, 1f / camSmoothing);
+        camRotation.x = Mathf.Lerp(camRotation.x, mouseDelta.x, 1f / camSmoothing);
+        camRotation.y = Mathf.Lerp(camRotation.y, mouseDelta.y, camSmoothing);
 
         //add the cam rotation value to the rotational offset so we can use it in our positioning of the camera
-        camRotationalOffset += camRotation;
+        camRotationalOffset.x += camRotation.x;
+        camRotationalOffset.y -= camRotation.y;
+
+        camRotationalOffset.y = Mathf.Clamp(camRotationalOffset.y, -35, 15);
 
         //rotate the camera verticaly along the x axis (Vector3.rigth) by the negative y value of the mouse look 2d vector
-        transform.RotateAround(character.transform.position, Vector3.up, camRotation);
+        transform.RotateAround(character.transform.position, Vector3.up, camRotation.x);
+        transform.RotateAround(character.transform.position, Vector3.right, camRotation.y);
     }
 
     //using the offset vector, we want the camera to always be the same distance away from the character regardless of the current camera rotation
@@ -56,9 +61,10 @@ public class ThirdPersonController_Camera : MonoBehaviour {
         float newPositionZ = character.transform.position.z + positionalOffset.z;
 
         //combine the floats to create a vector and modify it by our rotation from our mouse look function
-        //since our camera rotational offset is only the y value, we need to create a new vector with 0 values for x and z
+        //since our camera rotational offset is only the y value and x value, we need to create a new vector with 0 value z
         Vector3 finalPosition = new Vector3(newPositionX, newPositionY, newPositionZ);
-        finalPosition = RotateVectorAroundPivot(finalPosition, character.transform.position, Quaternion.Euler(new Vector3(0, camRotationalOffset, 0)));
+        finalPosition = RotateVectorAroundPivot(finalPosition, character.transform.position, Quaternion.Euler(new Vector3(camRotationalOffset.y, camRotationalOffset.x, 0)));
+
 
         //set this as our new position for the camera
         transform.position = Vector3.Lerp(transform.position, finalPosition, 0.1f);
