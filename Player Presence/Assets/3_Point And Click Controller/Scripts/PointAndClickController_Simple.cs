@@ -21,7 +21,7 @@ public class PointAndClickController_Simple : PointAndClickController
         targetPosition = transform.position;
     }
 
-    //Update is called every frame
+    //Update is called once every frame
     private void Update()
     {
         PolishMovement();
