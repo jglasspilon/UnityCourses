@@ -7,12 +7,12 @@ using UnityEngine.UI;
 public class UIText_Simple : UIText {
 
     //related to the text component
-    private Text text;                      //actual text to be printed in the text box
-    private CanvasGroup textGroup;          //canvas group that controls the text box visibility and interactability
-    private int textIndex = 0;              //keeps track of the current text within the text collection
+    protected Text text;                      //actual text to be printed in the text box
+    protected CanvasGroup textGroup;          //canvas group that controls the text box visibility and interactability
+    protected int textIndex = 0;              //keeps track of the current text within the text collection
 
     // Use this for initialization
-    void Start()
+    protected virtual void Awake()
     {
         text = GetComponentInChildren<Text>();
         textGroup = GetComponent<CanvasGroup>();

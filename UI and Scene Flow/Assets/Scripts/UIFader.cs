@@ -20,7 +20,25 @@ public class UIFader : MonoBehaviour {
         //calculate the speed of fading by dividing the magnitude of change (1) by the fade time
         fadeSpeed = 1 / fadeTime;
 	}
-	
+
+    //Called once every frame
+    private void Update()
+    {
+        //if the fader is transparent then set it so it doesn't block raycasts
+        if(group.alpha == 0)
+        {
+            if(group.blocksRaycasts)
+                group.blocksRaycasts = false;
+        }
+
+        //otherwise block all raycasts
+        else
+        {
+            if(!group.blocksRaycasts)
+                group.blocksRaycasts = true;
+        }
+    }
+
     /// <summary>
     /// Fades the scene in (fades the fader to transparent)
     /// </summary>
@@ -47,6 +65,15 @@ public class UIFader : MonoBehaviour {
         fadingRoutine = StartCoroutine(SceneFade(1));
     }
 
+    /// <summary>
+    /// Allows the distinct setting of the fader's opacity
+    /// </summary>
+    /// <param name="alpha">desired opacity level</param>
+    public void SetFaderOpacity(int alpha)
+    {
+        group.alpha = Mathf.Clamp01(alpha);
+    }
+
     //Fades the scene either in or out depending on the target parameter (0 transparent, 1 opaque)
     private IEnumerator SceneFade(int target)
     {
@@ -66,7 +93,7 @@ public class UIFader : MonoBehaviour {
 
             yield return null;
         }
-
+        group.alpha = target;
         isFading = false;
     }
 }
