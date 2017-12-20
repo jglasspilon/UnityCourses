@@ -11,7 +11,7 @@ public class UIFader : MonoBehaviour {
     private CanvasGroup group;                      //canvas group that controls the fade
 
     private Coroutine fadingRoutine = null;         //keeps track of the active fade coroutine
-    public bool isFading = false;                   //is the fader currently fading
+    public GameObject loadingFeedback;              //reference to the loading feedback gameobject
 
 	// Use this for initialization
 	private void Awake () {
@@ -47,9 +47,9 @@ public class UIFader : MonoBehaviour {
         if (fadingRoutine != null)
         {
             StopCoroutine(fadingRoutine);
-            isFading = false;
         }
         fadingRoutine = StartCoroutine(SceneFade(0));
+        loadingFeedback.SetActive(false);
     }
 
     /// <summary>
@@ -60,7 +60,6 @@ public class UIFader : MonoBehaviour {
         if(fadingRoutine != null)
         {
             StopCoroutine(fadingRoutine);
-            isFading = false;
         }
         fadingRoutine = StartCoroutine(SceneFade(1));
     }
@@ -77,8 +76,6 @@ public class UIFader : MonoBehaviour {
     //Fades the scene either in or out depending on the target parameter (0 transparent, 1 opaque)
     private IEnumerator SceneFade(int target)
     {
-        isFading = true;
-
         //keeps track of how far along the transition we are
         float counter = 0;
 
@@ -93,7 +90,14 @@ public class UIFader : MonoBehaviour {
 
             yield return null;
         }
+
+        //force the alpha to the target value
         group.alpha = target;
-        isFading = false;
+
+        //if the alpha is 1 then display the loading feedback object
+        if(group.alpha == 1)
+        {
+            loadingFeedback.SetActive(true);
+        }
     }
 }
